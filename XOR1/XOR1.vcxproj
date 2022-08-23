@@ -153,6 +153,16 @@
   <ItemGroup>
     <ClCompile Include="XOR1.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BaseArcGroup.h" />
+    <ClInclude Include="BaseEnvironment.h" />
+    <ClInclude Include="BaseNodeGroup.h" />
+    <ClInclude Include="Environment.h" />
+    <ClInclude Include="EnvOutput.h" />
+    <ClInclude Include="Evaluation.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="System.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
