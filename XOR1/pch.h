@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #include <iostream>
 #include <iomanip>
 #include <fstream>
@@ -13,6 +12,9 @@
 #include <tuple>
 #include "A:\Projects\JSON\json.hpp"
 #include <time.h>
+#include <array>
+#include <vector>
+#include <chrono>
 
 using namespace std;
 using json = nlohmann::json;
@@ -24,6 +26,7 @@ typedef vector<value_t> state_t;
 typedef vector<unsigned> ustate_t;
 typedef vector<int> intstate_t;
 typedef vector<vector<value_t>> array_t;
+typedef map<string, double> param_t;
 
 // random
 default_random_engine rng;
@@ -33,13 +36,24 @@ normal_distribution<value_t> normaldistribution(0.0, 1.0);
 // enums
 enum RandomArcModel { probModel, degreeModel };
 enum NodeGroupNameEnum {
-	AgentInput,
-	AgentLayer1,
-	AgentLayer2,
-	AgentOutput,
-	AgentAction,
-	EnvironmentHeat,
-	EnvironmentWork,
-	EnvironmentOutput,
-	EnvironmentReward
+	AgentInputGroup,
+	AgentLayer1Group,
+	AgentLayer2Group,
+	AgentOutputGroup,
+	AgentActionGroup,
+	EnvHeatGroup,
+	EnvWorkGroup,
+	EnvOutputGroup,
+	EnvRewardGroup
+};
+enum ArcGroupNameEnum {
+	EnvOutput2AgentInput,
+	AgentInput2AgentLayer1,
+	AgentLayer12AgentLayer2,
+	AgentLayer22AgentOutput,
+	AgentOutput2AgentAction,
+	AgentAction2EnvReward,
+	EnvReward2Agent,
+	Agent2EnvHeat,
+	Agent2EnvWork
 };

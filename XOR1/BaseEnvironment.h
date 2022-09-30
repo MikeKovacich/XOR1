@@ -22,5 +22,6 @@ struct BaseEnvironment {
 	};
 	virtual bool booleanFunction(vector<bool> x) = 0;
 	virtual void Step_CPU(value_t t, value_t dt, vector<bool> &caseValue) = 0;
+	virtual unsigned GetTrueAction(value_t t, value_t dt) = 0;
 
 };

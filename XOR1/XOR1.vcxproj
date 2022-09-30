@@ -154,12 +154,28 @@
     <ClCompile Include="XOR1.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Agent.h" />
+    <ClInclude Include="Agent2Agent.h" />
+    <ClInclude Include="AgentAction.h" />
+    <ClInclude Include="AgentInput.h" />
+    <ClInclude Include="AgentLayer1.h" />
+    <ClInclude Include="AgentLayer2.h" />
+    <ClInclude Include="AgentOutput.h" />
+    <ClInclude Include="AgOut2AgAct.h" />
+    <ClInclude Include="BaseArc.h" />
     <ClInclude Include="BaseArcGroup.h" />
     <ClInclude Include="BaseEnvironment.h" />
+    <ClInclude Include="BaseGroup.h" />
+    <ClInclude Include="BaseLearner.h" />
+    <ClInclude Include="BaseNode.h" />
     <ClInclude Include="BaseNodeGroup.h" />
+    <ClInclude Include="EnvHeat.h" />
     <ClInclude Include="Environment.h" />
     <ClInclude Include="EnvOutput.h" />
+    <ClInclude Include="EnvReward.h" />
+    <ClInclude Include="EnvWork.h" />
     <ClInclude Include="Evaluation.h" />
+    <ClInclude Include="Learner1.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="System.h" />
   </ItemGroup>
