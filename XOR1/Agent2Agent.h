@@ -45,7 +45,8 @@ struct Agent2Agent : public BaseArcGroup
 	virtual void InitState(unsigned idx, state_t &x);
 	virtual void ResetState(unsigned idx, state_t &x, value_t* data);
 	virtual void StepState(unsigned idx, state_t &x, value_t* data, 
-		BaseNodeGroup &nodePred, BaseNodeGroup &nodeSucc, value_t t, value_t dt);
+		Agent *nodePred, Agent *nodeSucc, value_t t, value_t dt);
+	//virtual void StepState(unsigned idx, state_t &x, value_t* data, value_t t, value_t dt);
 
 };
 void Agent2Agent::InitState(unsigned idx, state_t &x) {
@@ -76,7 +77,7 @@ void Agent2Agent::ResetState(unsigned idx, state_t &x, value_t* data) {
 	x[8] = 0.0;
 }
 void Agent2Agent::StepState(unsigned idx, state_t &x, value_t* data, 
-	BaseNodeGroup &nodePred, BaseNodeGroup &nodeSucc, value_t t, value_t dt) {
+	Agent *nodePred, Agent *nodeSucc, value_t t, value_t dt) {
 	// ID, EXC, PRED, SUCC, W, NC
 	// unpack state
 	int exc = x[1];
@@ -86,23 +87,24 @@ void Agent2Agent::StepState(unsigned idx, state_t &x, value_t* data,
 	value_t nc = x[5];  // normalized post-synaptic conductance
 
 	// pred data
-	unsigned sizeStatePred = nodePred.mSizeState;
+	unsigned sizeStatePred = nodePred->mSizeState;
 	state_t xPred(sizeStatePred);
-	nodePred.UnPack(nodePred.mStates.data(), xPred, pred);
+	nodePred->UnPack(nodePred->mStates.data(), xPred, pred);
 	value_t VPred = xPred[2];  // pred node output voltage
 	value_t SPIKEPred = xPred[4];  // Spike Indicator
 	value_t TPred = xPred[5];  // time of last spike
 
 	// succ data
 	//BaseNodeGroup mSuccV = *mNodeGroups[mSuccGroupID];
-	unsigned sizeStateSucc = nodeSucc.mSizeState;
+	unsigned sizeStateSucc = nodeSucc->mSizeState;
 	state_t xSucc(sizeStateSucc);
-	sizeStateSucc = nodeSucc.mSizeState;
-	nodeSucc.UnPack(nodeSucc.mStates.data(), xSucc, succ);
+	sizeStateSucc = nodeSucc->mSizeState;
+	nodeSucc->UnPack(nodeSucc->mStates.data(), xSucc, succ);
 	value_t ISucc = xSucc[1];  // succ node input current
 	value_t VSucc = xSucc[2];  // succ node membrane potential
 	value_t SPIKESucc = xSucc[4];  // Spike Indicator
 	value_t TSucc = xSucc[5];  // time of last spike
+	value_t VThresh = nodeSucc->mVThresh;
 
 	// reward data
 	
@@ -133,12 +135,11 @@ void Agent2Agent::StepState(unsigned idx, state_t &x, value_t* data,
 	cout << "Ag2AgStep:  " << " t:  " << t << " I:  " << ISucc << " dI:  " << dI << endl;
 	// pack state of successor node
 	xSucc[1] = ISucc;
-	nodeSucc.Pack(nodeSucc.mStates.data(), xSucc, succ);
+	nodeSucc->Pack(nodeSucc->mStates.data(), xSucc, succ);
 
 	// pack state of arc
 	x[5] = nc;
 }
-
 
 
 //void BaseArcGroup::Init() {

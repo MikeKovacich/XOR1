@@ -1,7 +1,7 @@
 #pragma once
 #include "pch.h"
 
-struct Agent {
+struct Agent : public BaseNodeGroup {
 
 	enum State_IDX { ID_idx, I_idx, V_idx, IOUT_idx, SPIKE_idx, SPIKET_idx };
 
@@ -15,10 +15,15 @@ struct Agent {
 	value_t mTimeConst = 10.0;  // ms
 	value_t mConductanceScale;	// mS / cm^2
 
-	Agent() {
+	Agent(string Name, unsigned ID, unsigned NumStates) :
+		BaseNodeGroup(Name, ID, NumStates) {
 		mR = mTimeConst / mC;		// kOhm/cm^2
 		mConductanceScale = 1.0;  // mS / cm^2 (100 pS/synapse and synapse = 10E-9 cm^2)
 	}
+	void InitState(unsigned idx, state_t &x);
+	void ResetState(unsigned idx, state_t &x, value_t* data);
+	void StepState(unsigned idx, state_t &xi, value_t* data, value_t t, value_t dt);
+
 	void QIFInitState(state_t &x);
 	void QIFResetState(state_t &x);
 	void QIFStepState(state_t &x, value_t t, value_t dt);
@@ -113,4 +118,16 @@ void Agent::QIFResetState(state_t &x) {
 	x[3] = inputCurrent;
 	x[4] = spike;
 	x[5] = spikeTime;
+}
+void Agent::InitState(unsigned indx, state_t &x) {
+	// ID, INP, X
+	QIFInitState(x);
+}
+void Agent::ResetState(unsigned indx, state_t &x, value_t* data) {
+	// ID, INP, X
+	QIFResetState(x);
+}
+void Agent::StepState(unsigned indx, state_t &x, value_t* data, value_t t, value_t dt) {
+	// ID, INP, X
+	QIFStepState(x, t, dt);
 }

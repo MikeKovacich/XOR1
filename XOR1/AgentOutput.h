@@ -2,7 +2,7 @@
 #include "pch.h"
 #include "BaseNodeGroup.h"
 
-struct AgentOutput : public BaseNodeGroup, public Agent
+struct AgentOutput : public Agent
 {
 	value_t mGamma = 0.99;  // decay rate for OUTPUT
 	//vector<unsigned> startSample;
@@ -10,7 +10,7 @@ struct AgentOutput : public BaseNodeGroup, public Agent
 
 	// ctor
 	AgentOutput(string Name, unsigned ID, unsigned NumStates) :
-		BaseNodeGroup(Name, ID, NumStates)
+		Agent(Name, ID, NumStates)
 	{
 		mLabel.push_back("INPOUT");
 		mLabel.push_back("SPIKE");

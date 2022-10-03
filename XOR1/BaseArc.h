@@ -21,6 +21,8 @@ struct BaseArc {
 
 	// Arc Generation
 	unsigned mPredID, mSuccID;
+
+
 	RandomArcModel mArcGenerationModel;
 	value_t mProbExcitatory;
 	unsigned mOutDegree;
@@ -65,11 +67,11 @@ struct BaseArc {
 	virtual void InitState(unsigned idx, state_t &x) = 0;
 	virtual void ResetState(unsigned idx, state_t &x, value_t* data) = 0;
 	virtual void StepState(unsigned idx, state_t &x, 
-		value_t* data, BaseNodeGroup &nodePred, BaseNodeGroup &nodeSucc, value_t t, value_t dt) = 0;
+		value_t* data, BaseNodeGroup *nodePred, BaseNodeGroup *nodeSucc, value_t t, value_t dt) = 0;
 
-	void Init(BaseNodeGroup &nodePred, BaseNodeGroup &nodeSucc) {};
+	void Init(BaseNodeGroup *nodePred, BaseNodeGroup *nodeSucc) {};
 	void Reset(value_t* data);
-	void Step(value_t* data, BaseNodeGroup &nodePred, BaseNodeGroup &nodeSucc, value_t t, value_t dt);
+	void Step(value_t* data, BaseNodeGroup *nodePred, BaseNodeGroup *nodeSucc, value_t t, value_t dt);
 
 	void Print(value_t* data, ofstream& ofs, bool hdr);
 	void Printf(value_t* data);
@@ -80,7 +82,7 @@ struct BaseArc {
 void BaseArc::InitState(unsigned idx, state_t &x) {}
 void BaseArc::ResetState(unsigned idx, state_t &x, value_t* data) {}
 void BaseArc::StepState(unsigned idx, state_t &x,
-	value_t* data, BaseNodeGroup &nodePred, BaseNodeGroup &nodeSucc, value_t t, value_t dt) {}
+	value_t* data, BaseNodeGroup *nodePred, BaseNodeGroup *nodeSucc, value_t t, value_t dt) {}
 
 void BaseArc::Pack(value_t* data, state_t x, unsigned indx) {
 	unsigned offset = indx * mSizeState;
@@ -169,7 +171,7 @@ void BaseArc::Reset(value_t* data) {
 	}
 }
 
-void BaseArc::Step(value_t* data, BaseNodeGroup &nodePred, BaseNodeGroup &nodeSucc, value_t t, value_t dt) {
+void BaseArc::Step(value_t* data, BaseNodeGroup *nodePred, BaseNodeGroup *nodeSucc, value_t t, value_t dt) {
 
 	// define local state variables
 	vector<value_t> x(mSizeState);

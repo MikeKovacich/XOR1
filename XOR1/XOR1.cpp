@@ -56,7 +56,7 @@ int main()
 	value_t dt = Sys.pEval->dt;
 	//// Simulation over trials
 	for (unsigned itrial = 0; itrial < Sys.pEval->numTrialsTraining; itrial++) {
-		if (itrial == 0) Sys.Init(); else Sys.Reset();
+		if (itrial > 0) Sys.Reset();
 		//// Simulation over time
 		for (unsigned t = 0; t < Sys.pEval->numStepsTraining; t++) {
 			std::cout << "Trial:  " << itrial << "  t:  " << t << '\n';

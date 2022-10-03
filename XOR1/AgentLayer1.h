@@ -2,14 +2,14 @@
 #include "pch.h"
 #include "BaseNodeGroup.h"
 
-struct AgentLayer1 : public BaseNodeGroup, public Agent
+struct AgentLayer1 : public Agent
 {
 	enum State_IDX { ID_idx, INP_idx, X_idx, INPOUT_idx, SPIKE_idx, SPIKET_idx };
 	//vector<unsigned> startSample;
 
 	// ctor
 	AgentLayer1(string Name, unsigned ID, unsigned NumStates) :
-		BaseNodeGroup(Name, ID, NumStates)
+		Agent(Name, ID, NumStates)
 	{
 		mLabel.push_back("INPOUT");
 		mLabel.push_back("SPIKE");
@@ -19,20 +19,20 @@ struct AgentLayer1 : public BaseNodeGroup, public Agent
 		mState.resize(mSizeState);
 		mStates.resize(mSizeStates);
 	}
-	virtual void InitState(unsigned idx, state_t &x);
-	virtual void ResetState(unsigned idx, state_t &x, value_t* data);
-	virtual void StepState(unsigned idx, state_t &x, value_t* data, value_t t, value_t dt);
+	//virtual void InitState(unsigned idx, state_t &x);
+	//virtual void ResetState(unsigned idx, state_t &x, value_t* data);
+	//virtual void StepState(unsigned idx, state_t &x, value_t* data, value_t t, value_t dt);
 };
-void AgentLayer1::InitState(unsigned idx, state_t &x) {
-	// ID, INP, X, SPIKE, SPIKET
-	QIFInitState(x);
-}
-void AgentLayer1::ResetState(unsigned idx, state_t &x, value_t* data) {
-	// ID, INP, X, SPIKE, SPIKET
-	QIFResetState(x);
-}
-void AgentLayer1::StepState(unsigned idx, state_t &x, value_t* data, value_t t, value_t dt) {
-	// ID, INP, X, SPIKE, SPIKET
-	QIFStepState(x, t, dt);  // Quadratic Integrate and Fire
-}
+//void AgentLayer1::InitState(unsigned idx, state_t &x) {
+//	// ID, INP, X, SPIKE, SPIKET
+//	QIFInitState(x);
+//}
+//void AgentLayer1::ResetState(unsigned idx, state_t &x, value_t* data) {
+//	// ID, INP, X, SPIKE, SPIKET
+//	QIFResetState(x);
+//}
+//void AgentLayer1::StepState(unsigned idx, state_t &x, value_t* data, value_t t, value_t dt) {
+//	// ID, INP, X, SPIKE, SPIKET
+//	QIFStepState(x, t, dt);  // Quadratic Integrate and Fire
+//}
 

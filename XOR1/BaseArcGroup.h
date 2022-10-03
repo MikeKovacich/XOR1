@@ -34,9 +34,9 @@ struct BaseArcGroup : public BaseArc
 	virtual void InitState(unsigned idx, state_t &x);
 	virtual void ResetState(unsigned idx, state_t &x, value_t* data);
 	virtual void StepState(unsigned idx, state_t &x, 
-		value_t* data, BaseNodeGroup &nodePred, BaseNodeGroup &nodeSucc, value_t t, value_t dt);
+		value_t* data, BaseNodeGroup *nodePred, BaseNodeGroup *nodeSucc, value_t t, value_t dt);
 
-	virtual void Init(BaseNodeGroup &nodePred, BaseNodeGroup &nodeSucc);
+	virtual void Init(BaseNodeGroup *nodePred, BaseNodeGroup *nodeSucc);
 	vector<vector<unsigned>> GenerateArcsDistributed(unsigned numRow, unsigned numCol,
 		unsigned outDegree, bool sameGroup);
 	vector<vector<unsigned>> GenerateArcsDistributedTry(unsigned numRow, unsigned numCol,
@@ -57,7 +57,7 @@ void BaseArcGroup::ResetState(unsigned idx, state_t &x, value_t* data) {
 
 }
 void BaseArcGroup::StepState(unsigned indx, state_t &x, 
-	value_t* data, BaseNodeGroup &nodePred, BaseNodeGroup &nodeSucc, value_t t, value_t dt) {
+	value_t* data, BaseNodeGroup *nodePred, BaseNodeGroup *nodeSucc, value_t t, value_t dt) {
 	// ID, EXC, PRED, SUCC, W
 	// unpack state
 	int exc = x[1];
@@ -68,17 +68,17 @@ void BaseArcGroup::StepState(unsigned indx, state_t &x,
 
 	// pred data
 
-	unsigned sizeStatePred = nodePred.mSizeState;
+	unsigned sizeStatePred = nodePred->mSizeState;
 	state_t xPred(sizeStatePred);
-	nodePred.UnPack(nodePred.mStates.data(), xPred, pred);
+	nodePred->UnPack(nodePred->mStates.data(), xPred, pred);
 	value_t VPred = xPred[2];  // pred node output voltage
 
 	// succ data
 	//BaseNodeGroup mSuccV = *mNodeGroups[mSuccGroupID];
-	unsigned sizeStateSucc = nodeSucc.mSizeState;
+	unsigned sizeStateSucc = nodeSucc->mSizeState;
 	state_t xSucc(sizeStateSucc);
-	sizeStateSucc = nodeSucc.mSizeState;
-	nodeSucc.UnPack(nodeSucc.mStates.data(), xSucc, succ);
+	sizeStateSucc = nodeSucc->mSizeState;
+	nodeSucc->UnPack(nodeSucc->mStates.data(), xSucc, succ);
 	value_t ISucc = xSucc[1];  // succ node input current
 
 	// define local variables
@@ -94,14 +94,14 @@ void BaseArcGroup::StepState(unsigned indx, state_t &x,
 	// note:  no update of arc itself
 	xSucc[1] = ISucc;
 
-	nodeSucc.Pack(nodeSucc.mStates.data(), xSucc, succ);  
+	nodeSucc->Pack(nodeSucc->mStates.data(), xSucc, succ);  
 }
 
-void BaseArcGroup::Init(BaseNodeGroup &nodePred, BaseNodeGroup &nodeSucc) {
+void BaseArcGroup::Init(BaseNodeGroup *nodePred, BaseNodeGroup *nodeSucc) {
 
-	bool sameGroup = (nodePred.mID == nodeSucc.mID);
-	unsigned numRow = nodePred.mNumStates;
-	unsigned numCol = nodeSucc.mNumStates;
+	bool sameGroup = (nodePred->mID == nodeSucc->mID);
+	unsigned numRow = nodePred->mNumStates;
+	unsigned numCol = nodeSucc->mNumStates;
 	unsigned outDegree = mOutDegree;
 	bool distributedArcs = true;
 	vector<vector<unsigned>> arc;

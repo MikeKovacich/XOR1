@@ -25,8 +25,10 @@ struct System{
 	string systemName;
 	Environment* pEnv;
 	Evaluation* pEval;
-	vector<unique_ptr<BaseNodeGroup>> nodeGroups;
-	vector<unique_ptr<BaseArcGroup>> arcGroups;
+	//vector<unique_ptr<BaseNodeGroup>> nodeGroups;
+	//vector<unique_ptr<BaseArcGroup>> arcGroups;
+	vector<BaseNodeGroup*> nodeGroups;
+	vector<BaseArcGroup*> arcGroups;
 	map<string, unsigned> nodeGroupID;
 
 	// ctor
@@ -222,7 +224,7 @@ void System::buildNodesFromJSON() {
 		case 3:
 			//AgentOutput
 		{
-			AgentOutput *pNodeGroup = new AgentOutput(nameGroup, groupID, numNode);
+			AgentOutput* pNodeGroup = new AgentOutput(nameGroup, groupID, numNode);
 			numAction = numNode;
 			pNodeGroup->Init();
 			nodeGroups.emplace_back(pNodeGroup);
@@ -327,7 +329,7 @@ void System::buildArcsFromJSON() {
 			Agent2Agent *pArcGroup = new Agent2Agent(arcGroupName, arcGroupID, predID, succID,
 				probExcitatory, outDegree, directed, volumetric,
 				arcGenerationModel, weight, pEnv, pLearner);
-			pArcGroup->Init(*nodeGroups[predID], *nodeGroups[succID]);
+			pArcGroup->Init(nodeGroups[predID], nodeGroups[succID]);
 			arcGroups.emplace_back(pArcGroup);
 			break;
 		}
@@ -336,7 +338,7 @@ void System::buildArcsFromJSON() {
 			Agent2Agent *pArcGroup = new Agent2Agent(arcGroupName, arcGroupID, predID, succID,
 				probExcitatory, outDegree, directed, volumetric,
 				arcGenerationModel, weight, pEnv, pLearner);
-			pArcGroup->Init(*nodeGroups[predID], *nodeGroups[succID]);
+			pArcGroup->Init(nodeGroups[predID], nodeGroups[succID]);
 			arcGroups.emplace_back(pArcGroup);
 			break;
 		}
@@ -345,7 +347,7 @@ void System::buildArcsFromJSON() {
 			Agent2Agent *pArcGroup = new Agent2Agent(arcGroupName, arcGroupID, predID, succID,
 				probExcitatory, outDegree, directed, volumetric,
 				arcGenerationModel, weight, pEnv, pLearner);
-			pArcGroup->Init(*nodeGroups[predID], *nodeGroups[succID]);
+			pArcGroup->Init(nodeGroups[predID], nodeGroups[succID]);
 			arcGroups.emplace_back(pArcGroup);
 			break;
 		}
@@ -354,7 +356,7 @@ void System::buildArcsFromJSON() {
 			AgOut2AgAct *pArcGroup = new AgOut2AgAct(arcGroupName, arcGroupID, predID, succID,
 				probExcitatory, outDegree, directed, volumetric,
 				arcGenerationModel, weight);
-			pArcGroup->Init(*nodeGroups[predID], *nodeGroups[succID]);
+			pArcGroup->Init(nodeGroups[predID], nodeGroups[succID]);
 			arcGroups.emplace_back(pArcGroup);
 			break;
 		}
@@ -362,7 +364,7 @@ void System::buildArcsFromJSON() {
 		{
 			BaseArcGroup* pArcGroup = new BaseArcGroup(arcGroupName, arcGroupID, predID, succID,
 				probExcitatory, outDegree, directed, volumetric, arcGenerationModel, weight);
-			pArcGroup->Init(*nodeGroups[predID], *nodeGroups[succID]);
+			pArcGroup->Init(nodeGroups[predID], nodeGroups[succID]);
 			arcGroups.emplace_back(pArcGroup);
 		}
 		}
@@ -378,7 +380,7 @@ void System::Init() {
 		predID = arcGroups[arcGrpID]->mPredID;
 		succID = arcGroups[arcGrpID]->mSuccID;
 		arcData = arcGroups[arcGrpID]->mStates.data();
-		arcGroups[arcGrpID]->Init(*nodeGroups[predID], *nodeGroups[succID]);
+		arcGroups[arcGrpID]->Init(nodeGroups[predID], nodeGroups[succID]);
 	}
 	// Nodes
 	for (int nodeGrpID = 0; nodeGrpID < nodeGroups.size(); nodeGrpID++) {
@@ -414,7 +416,7 @@ void System::Step(value_t t, value_t dt) {
 		succID = arcGroups[arcGrpID]->mSuccID;
 		arcData = arcGroups[arcGrpID]->mStates.data();
 		arcGroups[arcGrpID]->Step(arcData,
-			*nodeGroups[predID], *nodeGroups[succID], t, dt);
+			nodeGroups[predID], nodeGroups[succID], t, dt);
 	}
 	// Nodes
 	for (int nodeGrpID = 0; nodeGrpID < nodeGroups.size(); nodeGrpID++) {
